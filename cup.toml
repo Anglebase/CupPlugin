@@ -1,0 +1,10 @@
+[project]
+name = "cup_plugin"
+version = "0.1.0"
+type = "static"
+
+[build]
+stdcxx = 20
+
+[dependencies]
+tomlpp = { url = "@Anglebase/tomlpp", version = "3.4.0" }
