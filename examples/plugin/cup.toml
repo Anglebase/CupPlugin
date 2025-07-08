@@ -1,0 +1,10 @@
+[project]
+name = "plugin"
+version = "0.1.0"
+type = "module"
+
+[build]
+stdcxx = 20
+
+[dependencies]
+cup_plugin = { path = '../..' }
