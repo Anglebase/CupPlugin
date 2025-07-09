@@ -46,11 +46,3 @@ public:
 };
 
 EXPORT_PLUGIN(Plugin);
-
-int main() {
-    auto plugin = createPlugin();
-    std::optional<std::string> except;
-    std::cout << plugin->getName(except) << std::endl;
-    destroyPlugin(plugin);
-    return 0;
-}
