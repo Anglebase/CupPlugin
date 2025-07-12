@@ -28,7 +28,7 @@ struct CMakeContext
     std::string name;
     // The required version of CMake for the project.
     // Modify this value through member function `set_cmake_version`.
-    mutable std::pair<int, int> cmake_version;
+    std::pair<int, int>& cmake_version;
     // The path where the project is located.
     fs::path current_dir;
     // The path where the constructed project is located.
@@ -36,9 +36,11 @@ struct CMakeContext
     // For dependencies, it indicates the root project that depends on this package,
     // which is the path where the project being built is located.
     fs::path root_dir;
-    // Feature macros from the dependency table in the configuration file.
-    // Plugins can decide how to interpret them themselves.
+    // All features that have been resolved and expanded.
+    // The plugin can be generated based on the conditions of the CMake.
     std::vector<std::string> features;
+    // The dependency key names that actually take effect after version merging and feature control.
+    std::set<std::string> dependencies;
 
     void set_cmake_version(int major, int minor) const
     {
@@ -114,15 +116,9 @@ public:
     };
 };
 
-#ifdef _MSC_VER
-#define EXPORT_PLUGIN_API __declspec(dllexport)
-#else
-#define EXPORT_PLUGIN_API
-#endif
-
-#define EXPORT_PLUGIN(impl)                                                      \
-    extern "C"                                                                   \
-    {                                                                            \
-        EXPORT_PLUGIN_API IPlugin *createPlugin() { return new impl(); }         \
-        EXPORT_PLUGIN_API void destroyPlugin(IPlugin *plugin) { delete plugin; } \
+#define EXPORT_PLUGIN(impl)                                    \
+    extern "C"                                                 \
+    {                                                          \
+        IPlugin *createPlugin() { return new impl(); }         \
+        void destroyPlugin(IPlugin *plugin) { delete plugin; } \
     }
