@@ -11,6 +11,7 @@ cmd::Args::Args(int argc, char **argv)
         {
             auto config_ = arg.substr(2);
             config = std::optional<std::string>(config_);
+            this->config_args[config.value()] = std::vector<std::string>();
         }
         else if (arg.starts_with("-"))
         {
